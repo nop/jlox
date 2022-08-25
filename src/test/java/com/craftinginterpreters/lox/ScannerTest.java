@@ -1,6 +1,5 @@
 package com.craftinginterpreters.lox;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -11,10 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScannerTest {
 
-	@BeforeEach
-	void setUp() {
-	}
-
 	@Test
 	void andy() {
 		String source = "andy";
@@ -22,8 +17,6 @@ class ScannerTest {
 				new Token(IDENTIFIER, "andy", null, 1),
 				new Token(EOF, "", null, 1)
 		);
-		System.out.println("expected = " + expected);
-		System.out.println("tokens = " + new Scanner(source).scanTokens());
 		assertEquals(expected, new Scanner(source).scanTokens());
 	}
 
@@ -136,6 +129,79 @@ class ScannerTest {
 				new Token(STRING, "\"\"", "", 1),
 				new Token(STRING, "\"string\"", "string", 2),
 				new Token(EOF, "", null, 3)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentLine() {
+		String source = """
+				// This is a comment
+				""";
+		List<Token> expected = List.of(
+				new Token(EOF, "", null, 2)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentBlockOneLine() {
+		String source = """
+				/* This is a single-line block comment. */
+				""";
+		List<Token> expected = List.of(
+				new Token(EOF, "", null, 2)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentBlockMultiLine() {
+		String source = """
+				/* This is a
+				multi-line block comment. */
+				""";
+		List<Token> expected = List.of(
+				new Token(EOF, "", null, 3)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentBlockNested() {
+		// The comment should be /* This is a /* nested */
+		String source = """
+				/* This is a /* nested */ block comment. */
+				""";
+		List<Token> expected = List.of(
+				new Token(IDENTIFIER, "block", null, 1),
+				new Token(IDENTIFIER, "comment", null, 1),
+				new Token(DOT, ".", null, 1),
+				new Token(STAR, "*", null, 1),
+				new Token(SLASH, "/", null, 1),
+				new Token(EOF, "", null, 2)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentBlockDouble() {
+		String source = """
+				/* This is a block comment. *//* This is a block comment. */
+				""";
+		List<Token> expected = List.of(
+				new Token(EOF, "", null, 2)
+		);
+		assertEquals(expected, new Scanner(source).scanTokens());
+	}
+
+	@Test
+	void commentBlockThenLine() {
+		String source = """
+				/* This is a block comment. */// This is a line comment.
+				""";
+		List<Token> expected = List.of(
+				new Token(EOF, "", null, 2)
 		);
 		assertEquals(expected, new Scanner(source).scanTokens());
 	}

@@ -7,18 +7,8 @@ import java.util.Map;
 
 import static com.craftinginterpreters.lox.TokenType.*;
 
+// TODO: Implement Lox TokenStream
 class Scanner {
-	private final String source;
-	private final List<Token> tokens = new ArrayList<>();
-	/**
-	 * The start of a lexeme in the source code.
-	 */
-	private int start = 0;
-	/**
-	 * The current offset into the lexeme.
-	 */
-	private int current = 0;
-	private int line = 1;
 	private static final Map<String, TokenType> keywords;
 
 	static {
@@ -40,6 +30,18 @@ class Scanner {
 		keywords.put("var", VAR);
 		keywords.put("while", WHILE);
 	}
+
+	private final String source;
+	private final List<Token> tokens = new ArrayList<>();
+	/**
+	 * The start of a lexeme in the source code.
+	 */
+	private int start = 0;
+	/**
+	 * The current offset into the lexeme.
+	 */
+	private int current = 0;
+	private int line = 1;
 
 	Scanner(String source) {
 		this.source = source;
@@ -79,8 +81,16 @@ class Scanner {
 
 			case '/' -> {
 				if (match('/')) {
-					// consume the comment
+					// consume the line comment
 					while (peek() != '\n' && !isAtEnd()) advance();
+				} else if (match('*')) {
+					// consume the block comment
+					while (!isAtEnd() && !(peek() == '*' && peekNext() == '/')) {
+						if (advance() == '\n') line++;
+					}
+					// consume the comment closing
+					advance(); // *
+					advance(); // /
 				} else {
 					addToken(SLASH);
 				}
@@ -174,6 +184,7 @@ class Scanner {
 
 	/**
 	 * Advance the current position in the source code if the expected character is found.
+	 *
 	 * @param expected the character expected to be at the current position
 	 * @return true if the expected character is found, false otherwise
 	 */
