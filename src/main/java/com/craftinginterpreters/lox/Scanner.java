@@ -1,5 +1,7 @@
 package com.craftinginterpreters.lox;
 
+import com.craftinginterpreters.lox.ast.Token;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.craftinginterpreters.lox;
 
+import com.craftinginterpreters.lox.ast.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

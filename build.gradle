@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 group 'com.craftinginterpreters'
@@ -16,4 +17,32 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/main/java"
+        }
+    }
+}
+
+idea {
+    module {
+        generatedSourceDirs += file "${buildDir}/generated/main/java"
+    }
+}
+
+task generateAst(type: JavaExec) {
+    description "Generate AST classes"
+    main 'com.craftinginterpreters.tool.GenerateAst'
+    classpath sourceSets.main.runtimeClasspath
+    args = [
+            "${buildDir}/generated/main/java/com/craftinginterpreters/lox/ast",
+            "Expr",
+            "Binary   : Expr left, Token operator, Expr right",
+            "Grouping : Expr expression",
+            "Literal  : Object value",
+            "Unary    : Token operator, Expr right"
+    ]
 }
