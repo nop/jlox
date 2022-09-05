@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'application'
     id 'idea'
 }
 
@@ -33,6 +33,14 @@ idea {
     }
 }
 
+application {
+    mainClass = 'com.craftinginterpreters.lox.Lox'
+}
+
+run {
+    standardInput = System.in
+}
+
 
 /*
  * TODO: Make this not rely on the lox module.
@@ -49,7 +57,7 @@ idea {
  */
 task generateAst(type: JavaExec) {
     description "Generate AST classes"
-    main 'com.craftinginterpreters.tool.GenerateAst'
+    mainClass = 'com.craftinginterpreters.tool.GenerateAst'
     classpath sourceSets.main.runtimeClasspath
     args = [
             "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
