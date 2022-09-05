@@ -33,16 +33,43 @@ idea {
     }
 }
 
+
+/*
+ * TODO: Make this not rely on the lox module.
+ *   It won't compile if there are errors in the module that depends on the code this task generates.
+ * Use the following command to generate the code:
+   java -cp "D:\src\jlox\src\main\java" \
+   com.craftinginterpreters.tool.GenerateAst \
+   D:\src\jlox\build\generated\main\java\com\craftinginterpreters\lox \
+   Expr \
+   "Binary   : Expr left, Token operator, Expr right" \
+   "Grouping : Expr expression" \
+   "Literal  : Object value" \
+   "Unary    : Token operator, Expr right"
+ */
 task generateAst(type: JavaExec) {
     description "Generate AST classes"
     main 'com.craftinginterpreters.tool.GenerateAst'
     classpath sourceSets.main.runtimeClasspath
     args = [
-            "${buildDir}/generated/main/java/com/craftinginterpreters/lox/ast",
+            "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
             "Expr",
             "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal  : Object value",
             "Unary    : Token operator, Expr right"
     ]
+}
+
+// HACK: This is a hack to generate the AST classes before compiling the code. See above.
+task generateAstShell(type: Exec) {
+    description "Generate AST classes using a shell script"
+    commandLine "javac", "-cp", "src/main/java", "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
+    commandLine "java", "-cp", "src/main/java", "com.craftinginterpreters.tool.GenerateAst",
+            "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
+            "Expr",
+            "Binary   : Expr left, Token operator, Expr right",
+            "Grouping : Expr expression",
+            "Literal  : Object value",
+            "Unary    : Token operator, Expr right"
 }

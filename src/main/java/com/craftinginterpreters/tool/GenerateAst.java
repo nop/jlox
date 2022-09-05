@@ -30,7 +30,7 @@ class GenerateAst {
 		final String path = outputDir + "/" + baseName + ".java";
 		writer = new PrintWriter(path, StandardCharsets.UTF_8);
 		write("""
-			package com.craftinginterpreters.lox.ast;
+			package com.craftinginterpreters.lox;
 								
 			import java.util.List;
 								

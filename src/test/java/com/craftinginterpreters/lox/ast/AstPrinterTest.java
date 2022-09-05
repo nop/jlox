@@ -1,5 +1,8 @@
 package com.craftinginterpreters.lox.ast;
 
+import com.craftinginterpreters.lox.AstPrinter;
+import com.craftinginterpreters.lox.Expr;
+import com.craftinginterpreters.lox.Token;
 import com.craftinginterpreters.lox.TokenType;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,4 @@
-package com.craftinginterpreters.lox.ast;
-
-import com.craftinginterpreters.lox.TokenType;
+package com.craftinginterpreters.lox;
 
 // TODO: Turn this into an enum and eliminate the need for the type field?
 public record Token(TokenType type, String lexeme, Object literal, int line) {

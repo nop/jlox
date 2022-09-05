@@ -1,7 +1,5 @@
 package com.craftinginterpreters.lox;
 
-import com.craftinginterpreters.lox.ast.Token;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,7 +135,7 @@ class Scanner {
 		}
 
 		addToken(NUMBER,
-				Double.parseDouble(source.substring(start, current)));
+			Double.parseDouble(source.substring(start, current)));
 	}
 
 	private void string() {
@@ -171,8 +169,8 @@ class Scanner {
 
 	private boolean isAlpha(char c) {
 		return (c >= 'a' && c <= 'z') ||
-				(c >= 'A' && c <= 'Z') ||
-				c == '_';
+			(c >= 'A' && c <= 'Z') ||
+			c == '_';
 	}
 
 	private boolean isAlphaNumeric(char c) {
