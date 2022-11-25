@@ -7,7 +7,7 @@ public class RpnPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitBinaryExpr(Expr.Binary expr) {
-        return expr.left.accept(this) + " " + expr.right.accept(this) + " " + expr.operator.lexeme();
+        return expr.left.accept(this) + " " + expr.right.accept(this) + " " + expr.operator.lexeme;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class RpnPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitUnaryExpr(Expr.Unary expr) {
-        return expr.right.accept(this) + expr.operator.lexeme();
+        return expr.right.accept(this) + expr.operator.lexeme;
     }
 }
