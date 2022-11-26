@@ -1,9 +1,5 @@
-package com.craftinginterpreters.lox.ast;
+package com.craftinginterpreters.lox;
 
-import com.craftinginterpreters.lox.AstPrinter;
-import com.craftinginterpreters.lox.Expr;
-import com.craftinginterpreters.lox.Token;
-import com.craftinginterpreters.lox.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

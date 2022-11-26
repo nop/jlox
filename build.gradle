@@ -11,8 +11,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 test {
@@ -72,8 +73,9 @@ task generateAst(type: JavaExec) {
 // HACK: This is a hack to generate the AST classes before compiling the code. See above.
 task generateAstShell(type: Exec) {
     description "Generate AST classes using a shell script"
-    commandLine "javac", "-cp", "src/main/java", "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
-    commandLine "java", "-cp", "src/main/java", "com.craftinginterpreters.tool.GenerateAst",
+//    commandLine "javac", "-cp", "src/main/java", "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
+//    commandLine "java", "-cp", "src/main/java", "com.craftinginterpreters.tool.GenerateAst",
+    commandLine "java", "com.craftinginterpreters.tool.GenerateAst",
             "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
             "Expr",
             "Binary   : Expr left, Token operator, Expr right",
@@ -81,3 +83,10 @@ task generateAstShell(type: Exec) {
             "Literal  : Object value",
             "Unary    : Token operator, Expr right"
 }
+
+/*
+// https://stackoverflow.com/a/29602484
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn genSources
+}
+ */
