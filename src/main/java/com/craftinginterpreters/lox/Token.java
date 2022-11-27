@@ -28,9 +28,9 @@ public final class Token {
 		if (obj == null || obj.getClass() != this.getClass()) return false;
 		var that = (Token) obj;
 		return Objects.equals(this.type, that.type) &&
-				Objects.equals(this.lexeme, that.lexeme) &&
-				Objects.equals(this.literal, that.literal) &&
-				this.line == that.line;
+			Objects.equals(this.lexeme, that.lexeme) &&
+			Objects.equals(this.literal, that.literal) &&
+			this.line == that.line;
 	}
 
 	@Override
