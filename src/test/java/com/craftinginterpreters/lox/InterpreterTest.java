@@ -17,7 +17,7 @@ class InterpreterTest {
 	@CsvSource({"1+1,2", "(1+1),2", "(1+2)*(3+4),21"})
 	void simpleMath(String source, double expected) {
 		List<Token> tokens = new Scanner(source).scanTokens();
-		Expr ast = new Parser(tokens).parse();
+		Expr ast = new Parser(tokens).expression();
 		Object evaluation = new Interpreter().evaluate(ast);
 		assertInstanceOf(Double.class, evaluation, "Did not evaluate to a Double");
 		assertEquals(expected, new Interpreter().evaluate(ast));
