@@ -56,7 +56,7 @@ run {
    "Literal  : Object value" \
    "Unary    : Token operator, Expr right"
  */
-task generateAst(type: JavaExec) {
+tasks.register('generateAst', JavaExec) {
     description "Generate AST classes"
     mainClass = 'com.craftinginterpreters.tool.GenerateAst'
     classpath sourceSets.main.runtimeClasspath
@@ -70,18 +70,37 @@ task generateAst(type: JavaExec) {
     ]
 }
 
+def GenerateAst = "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
+def outdir = "${buildDir}/generated/main/java/com/craftinginterpreters/lox"
 // HACK: This is a hack to generate the AST classes before compiling the code. See above.
-task generateAstShell(type: Exec) {
-    description "Generate AST classes using a shell script"
-//    commandLine "javac", "-cp", "src/main/java", "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
-//    commandLine "java", "-cp", "src/main/java", "com.craftinginterpreters.tool.GenerateAst",
-    commandLine "java", "com.craftinginterpreters.tool.GenerateAst",
-            "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
-            "Expr",
-            "Binary   : Expr left, Token operator, Expr right",
-            "Grouping : Expr expression",
-            "Literal  : Object value",
-            "Unary    : Token operator, Expr right"
+// Consider using `java -cp src/jlox/src/main/java
+
+tasks.register('genAst') {
+    description "Generates AST classes"
+    dependsOn 'genExpr'
+    dependsOn 'genStmt'
+}
+
+tasks.register('genExpr', Exec) {
+    description "Generate Expr AST"
+    commandLine "java", GenerateAst, outdir,
+        "Expr",
+        "Assign   : Token name, Expr value",
+        "Binary   : Expr left, Token operator, Expr right",
+        "Grouping : Expr expression",
+        "Literal  : Object value",
+        "Unary    : Token operator, Expr right",
+        "Variable : Token name"
+}
+
+tasks.register('genStmt', Exec) {
+    description "Generate Stmt AST"
+    commandLine "java", GenerateAst, outdir,
+        "Stmt",
+        "Block      : List<Stmt> statements",
+        "Expression : Expr expression",
+        "Print      : Expr expression",
+        "Var        : Token name, Expr initializer"
 }
 
 /*

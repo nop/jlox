@@ -11,7 +11,7 @@ class RpnPrinterTest {
     @Test
     void visitBinaryExpr() {
         List<Token> tokens = new Scanner("(1 + 2) * (4 - 3)").scanTokens();
-        Expr expression = new Parser(tokens).parse();
+        Expr expression = new Parser(tokens).parseExpr();
 /*
         Expr expression = new Expr.Binary(
             new Expr.Unary(
