@@ -1,45 +1,45 @@
 plugins {
-    id 'application'
-    id 'idea'
+	id 'application'
+	id 'idea'
 }
 
 group 'com.craftinginterpreters'
 version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
 sourceSets {
-    main {
-        java {
-            srcDir "${buildDir}/generated/main/java"
-        }
-    }
+	main {
+		java {
+			srcDir "${buildDir}/generated/main/java"
+		}
+	}
 }
 
 idea {
-    module {
-        generatedSourceDirs += file "${buildDir}/generated/main/java"
-    }
+	module {
+		generatedSourceDirs += file "${buildDir}/generated/main/java"
+	}
 }
 
 application {
-    mainClass = 'com.craftinginterpreters.lox.Lox'
+	mainClass = 'com.craftinginterpreters.lox.Lox'
 }
 
 run {
-    standardInput = System.in
+	standardInput = System.in
 }
 
 
@@ -57,17 +57,17 @@ run {
    "Unary    : Token operator, Expr right"
  */
 tasks.register('generateAst', JavaExec) {
-    description "Generate AST classes"
-    mainClass = 'com.craftinginterpreters.tool.GenerateAst'
-    classpath sourceSets.main.runtimeClasspath
-    args = [
-            "${buildDir}/generated/main/java/com/craftinginterpreters/lox",
-            "Expr",
-            "Binary   : Expr left, Token operator, Expr right",
-            "Grouping : Expr expression",
-            "Literal  : Object value",
-            "Unary    : Token operator, Expr right"
-    ]
+	description "Generate AST classes"
+	mainClass = 'com.craftinginterpreters.tool.GenerateAst'
+	classpath sourceSets.main.runtimeClasspath
+	args = [
+		"${buildDir}/generated/main/java/com/craftinginterpreters/lox",
+		"Expr",
+		"Binary   : Expr left, Token operator, Expr right",
+		"Grouping : Expr expression",
+		"Literal  : Object value",
+		"Unary    : Token operator, Expr right"
+	]
 }
 
 def GenerateAst = "src/main/java/com/craftinginterpreters/tool/GenerateAst.java"
@@ -76,31 +76,34 @@ def outdir = "${buildDir}/generated/main/java/com/craftinginterpreters/lox"
 // Consider using `java -cp src/jlox/src/main/java
 
 tasks.register('genAst') {
-    description "Generates AST classes"
-    dependsOn 'genExpr'
-    dependsOn 'genStmt'
+	description "Generates AST classes"
+	dependsOn 'genExpr'
+	dependsOn 'genStmt'
 }
 
 tasks.register('genExpr', Exec) {
-    description "Generate Expr AST"
-    commandLine "java", GenerateAst, outdir,
-        "Expr",
-        "Assign   : Token name, Expr value",
-        "Binary   : Expr left, Token operator, Expr right",
-        "Grouping : Expr expression",
-        "Literal  : Object value",
-        "Unary    : Token operator, Expr right",
-        "Variable : Token name"
+	description "Generate Expr AST"
+	commandLine "java", GenerateAst, outdir,
+		"Expr",
+		"Assign   : Token name, Expr value",
+		"Binary   : Expr left, Token operator, Expr right",
+		"Grouping : Expr expression",
+		"Literal  : Object value",
+		"Logical  : Expr left, Token operator, Expr right",
+		"Unary    : Token operator, Expr right",
+		"Variable : Token name"
 }
 
 tasks.register('genStmt', Exec) {
-    description "Generate Stmt AST"
-    commandLine "java", GenerateAst, outdir,
-        "Stmt",
-        "Block      : List<Stmt> statements",
-        "Expression : Expr expression",
-        "Print      : Expr expression",
-        "Var        : Token name, Expr initializer"
+	description "Generate Stmt AST"
+	commandLine "java", GenerateAst, outdir,
+		"Stmt",
+		"Block      : List<Stmt> statements",
+		"Expression : Expr expression",
+		"If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
+		"Print      : Expr expression",
+		"Var        : Token name, Expr initializer",
+		"While      : Expr condition, Stmt body"
 }
 
 /*
